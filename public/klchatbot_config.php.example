@@ -1,0 +1,57 @@
+<?php
+/**
+ * Kurage Light ChatBot の設定。
+ * このファイルを klchatbot_config.php にコピーして編集してください(.exampleのままでは読み込まれません)。
+ *
+ * 【この製品の考え方】
+ * ボットの性格・知識・見た目は、管理画面ではなくこのファイルと sources/ フォルダで決めます。
+ * 変えたいことがあれば、このファイルを Claude Code などのAIエージェントに見せて
+ * 頼めば安全に書き換えてくれます(同梱 docs/ にAI向けの手引きがあります)。
+ */
+
+// ---- 画面 ----
+define('KLC_TITLE',       'サンプル商店 AI相談窓口');
+define('KLC_SUBTITLE',    '商品・営業時間・ご注文について24時間お答えします');
+define('KLC_WELCOME',     "こんにちは。サンプル商店のAI窓口です。\n商品やサービスについて、何でもご質問ください。");
+define('KLC_BRAND_COLOR', '#0a8f8f');   // お店のテーマ色
+define('KLC_EXAMPLES', array(           // 入力欄の上に出る「質問例」ボタン
+    '営業時間を教えて',
+    '返品はできますか？',
+    'おすすめの商品は？',
+));
+
+// ---- AI(OpenAI互換API) ----
+// 既定はDeepSeek。OpenAI等に変える場合は KLC_API_BASE と KLC_MODEL を差し替えるだけ。
+define('KLC_API_BASE', 'https://api.deepseek.com');
+define('KLC_API_KEY',  'sk-xxxx');                  // ★あなたのAPIキーに置き換え
+define('KLC_MODEL',    'deepseek-chat');            // 非推論モデル推奨(応答が速く安定)
+define('KLC_TEMPERATURE', 0.5);
+define('KLC_MAX_TOKENS',  1200);
+
+// ---- ボットの性格(システムプロンプト) ----
+define('KLC_SYSTEM_PROMPT',
+    'あなたは「サンプル商店」の案内係です。丁寧で親しみやすい日本語で、簡潔に答えます。' .
+    '知識ベースに基づいて答え、分からないことは正直に「分かりかねますので店舗へお問い合わせください」と案内します。');
+
+// ---- 知識ベース ----
+// sources/ フォルダの .md ファイルを名前順に全部読み込みます。
+// 商品一覧・FAQ・営業案内などを Markdown で置いてください(合計200KBまで)。
+// ※並び順(ファイル名)を変えるとAPIのキャッシュが切れて応答が遅く・高くなります。
+//   ファイルの「追加」は自由ですが、既存ファイルのリネームは避けるのが吉。
+define('KLC_SOURCES_DIR',  __DIR__ . '/sources');
+define('KLC_KB_MAX_BYTES', 200000);
+
+// ---- 公開範囲 ----
+// 'public'   = 誰でも使える(お客様向けFAQ・AI接客)
+// 'password' = 合言葉を知っている人だけ(社内ChatGPT)
+define('KLC_AUTH', 'public');
+define('KLC_PASSWORD', '');            // KLC_AUTH='password' のとき使用
+define('KLC_PASSWORD_HASH', '');       // password_hash()の値を入れるとこちらが優先(scripts/make_password_hash.php)
+
+// ---- 利用制限・記録 ----
+define('KLC_RATE_PER_HOUR', 30);       // 同一IPが1時間に質問できる回数(API費用の防波堤)
+define('KLC_INPUT_MAX', 800);          // 1質問の最大文字数
+define('KLC_HISTORY_MAX', 6);          // AIに渡す直近の会話数
+define('KLC_STREAM', true);            // 逐次表示(サーバーが対応しない場合はfalse)
+define('KLC_LOG', true);               // 質問ログを klc_data/log.jsonl に記録(IPはハッシュ化)
+define('KLC_DEMO', false);             // デモモード(制限強化+バッジ表示)

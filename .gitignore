@@ -1,0 +1,7 @@
+outputs/
+public/klchatbot_config.php
+public/sources/*.md
+!public/sources/README.md
+klc_data/*.json
+klc_data/*.jsonl
+*.log
