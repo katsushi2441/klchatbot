@@ -456,4 +456,5 @@ form.ask button:disabled { opacity:.5; cursor:default; }
 })();
 </script>
 <?php endif; ?>
+<?php if (($_SERVER['HTTP_HOST'] ?? '') === 'proto.exbridge.jp'): ?><p style="text-align:center;font-size:13px;margin:14px 0;color:#5d6b7a">これはデモです。<a href="https://kappstore.exbridge.jp/app.php?id=224e141f77bd07a8&amp;ref=klchatbot" target="_blank" rel="noopener">この製品をオンプレミスで導入する（商品ページ）</a></p><?php endif; ?>
 </body></html>
