@@ -11,6 +11,7 @@ define('KLC_EXAMPLES', array(
     '予約システムはいくらで買える？',
     '代理店の手数料は何%？',
     'AIチャットボットを自社サイトに置きたい',
+    '名古屋市中川区は今、避難が必要？',
 ));
 
 define('KLC_API_BASE', 'https://api.deepseek.com');
@@ -39,3 +40,23 @@ define('KLC_HISTORY_MAX', 4);
 define('KLC_STREAM', true);
 define('KLC_LOG', true);
 define('KLC_DEMO', true);
+
+// ---- 答え方・上限・道具（2026-09-29 追加） ----
+define('KLC_CITE', true);
+define('KLC_ASK_BACK', true);
+define('KLC_DAILY_TOKENS', 1500000);   // デモ全体で1日150万トークンまで（DeepSeek の料金の防波堤）
+define('KLC_DAILY_REQUESTS', 300);
+// 道具の例：当社の防災AIチャットの API を呼ぶ（別のシステムの API を、チャットから使えることを見せる）
+define('KLC_TOOLS', array(
+    array(
+        'name'        => 'bousai',
+        'label'       => '防災情報',
+        'description' => '日本の住所について、いまの警報・キキクル・台風・避難情報を調べ、避難が必要かを規則で判定した結果を返す。'
+                       . '防災・避難・台風・大雨・川・津波・土砂の質問のときだけ使う。',
+        'url'         => 'https://kurage.exbridge.jp/kbousai.php/api/ask?q={address}&msg={question}',
+        'params'      => array('address' => '住所（都道府県から。例: 愛知県名古屋市中川区）', 'question' => '利用者の質問そのまま'),
+        'pick'        => 'answer.lines',
+        'max_chars'   => 2000,
+    ),
+));
+define('KLC_TOOL_MAX_CALLS', 2);

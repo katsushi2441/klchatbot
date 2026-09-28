@@ -55,3 +55,30 @@ define('KLC_HISTORY_MAX', 6);          // AIに渡す直近の会話数
 define('KLC_STREAM', true);            // 逐次表示(サーバーが対応しない場合はfalse)
 define('KLC_LOG', true);               // 質問ログを klc_data/log.jsonl に記録(IPはハッシュ化)
 define('KLC_DEMO', false);             // デモモード(制限強化+バッジ表示)
+
+// ---- 答え方 ----
+define('KLC_CITE', true);              // 答えの下に「参照した資料」(sources/のどのファイルを根拠にしたか)を出す
+define('KLC_ASK_BACK', true);          // 質問があいまいなとき、AIが選択肢のボタンで聞き返す
+
+// ---- 1日の上限(サイト全体) ----
+// 公開のチャットは、誰かに大量に使われるとAPI料金が膨らみます。1日ここまで、を決めておきます。0 = 上限なし。
+// 超えると「本日のご利用が上限に達しました」と表示して、APIを呼びません(klc_data/budget.json に記録)。
+define('KLC_DAILY_TOKENS', 2000000);   // 1日のトークン数の上限(入力+出力。キャッシュの分も含めて多めに数えます)
+define('KLC_DAILY_REQUESTS', 1000);    // 1日の質問回数の上限
+
+// ---- 道具(ツール) ----
+// AIが、決められた HTTP GET の API を呼んで調べてから答えます(在庫・予約の空き・自社のデータなど)。
+// 送り先のURLはここに書いたものだけ。{名前} の部分に、AIが決めた値(URLエンコード済み)が入ります。
+// pick は JSON のどこをAIに渡すか(例: 'answer.lines')。道具を使うと、画面に「〜を確認しています」と進み具合が出ます。
+define('KLC_TOOLS', array(
+    // array(
+    //     'name'        => 'stock',                       // 半角英数字と _
+    //     'label'       => '在庫',                         // 画面の「在庫を確認しています」に使う
+    //     'description' => '商品の在庫数を調べる。商品名を渡す。',
+    //     'url'         => 'https://example.jp/api/stock?item={item}',
+    //     'params'      => array('item' => '商品名'),
+    //     'pick'        => 'data',
+    //     'max_chars'   => 3000,
+    // ),
+));
+define('KLC_TOOL_MAX_CALLS', 3);       // 1回の質問で呼べる道具の数
