@@ -14,9 +14,12 @@ define('KLC_EXAMPLES', array(
     '名古屋市中川区は今、避難が必要？',
 ));
 
-define('KLC_API_BASE', 'https://api.deepseek.com');
+// デモの AI は gemma4（当社サーバー）。**デモで DeepSeek を使わない**（有料サービス専用）。
+// heteml から社内の Ollama に届かないので、当社サーバーの共通の gemma4 中継（kaima/relay・:18343）を通す。
+// 製品ごとに中継のポートを増やさない。キーは中継の合言葉で、deploy_demo.sh が kaima/.env から入れる（リポジトリに置かない）。
+define('KLC_API_BASE', 'http://exbridge.ddns.net:18343/v1');
 define('KLC_API_KEY',  '__KLC_API_KEY__');
-define('KLC_MODEL',    'deepseek-chat');
+define('KLC_MODEL',    'gemma4:12b-it-qat');
 define('KLC_TEMPERATURE', 0.5);
 define('KLC_MAX_TOKENS',  900);
 
@@ -44,7 +47,7 @@ define('KLC_DEMO', true);
 // ---- 答え方・上限・道具（2026-09-29 追加） ----
 define('KLC_CITE', true);
 define('KLC_ASK_BACK', true);
-define('KLC_DAILY_TOKENS', 1500000);   // デモ全体で1日150万トークンまで（DeepSeek の料金の防波堤）
+define('KLC_DAILY_TOKENS', 1500000);   // デモ全体で1日150万トークンまで（GPU を占有しすぎない）
 define('KLC_DAILY_REQUESTS', 300);
 // 道具の例：当社の防災AIチャットの API を呼ぶ（別のシステムの API を、チャットから使えることを見せる）
 define('KLC_TOOLS', array(
